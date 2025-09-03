@@ -8,7 +8,7 @@ export SETUP="$ZSH/setup"
 command_exists() {
   command -v "$@" >/dev/null 2>&1
 }
-
+# New config
 # Load color formatter
 . $HOME/.config/posix/print_format.sh
 
@@ -74,4 +74,5 @@ fi
     export PATH="$PATH:$HOME/.lmstudio/bin"
   {{- end }}
 {{ end }}
+# other comment
 
