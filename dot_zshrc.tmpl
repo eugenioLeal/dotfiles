@@ -31,6 +31,11 @@ command_exists nvim || {
 }
 export EDITOR=nvim
 
+# Source the shared aliases file
+if [ -f $HOME/.config/posix/aliases ]; then
+    source $HOME/.config/posix/aliases
+fi
+
 # Install/Activate Mise
 source $SETUP/mise.zsh
 if [ $? -eq 0 ]; then
