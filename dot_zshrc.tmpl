@@ -49,6 +49,11 @@ export PATH="$PATH:$GOPATH/bin"
 source <(fzf --zsh)
 {{ end }}
 
+# Zoxide 
+if command -v zoxide &> /dev/null; then
+  eval "$(zoxide init zsh)"
+fi
+
 # Enable vi mode
 bindkey -v
 
