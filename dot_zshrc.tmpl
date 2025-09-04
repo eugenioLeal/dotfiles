@@ -68,6 +68,12 @@ export PATH=$BREW_PATH:$PATH
 {{ if (lookPath "/Applications/iTerm.app/Contents/MacOS/iTerm2") }}
 source $SETUP/iterm2.zsh
 {{ end }}
+# Ignore DS_Store files in git
+if [[ -x $HOME/.config/git/ignore ]]; then
+    if command_exists git; then
+      git config --global core.excludesfile $HOME/.config/git/ignore
+    fi
+fi
 #####################
 ### LINUX CONFIG  ###
 #####################
