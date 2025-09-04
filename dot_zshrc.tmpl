@@ -8,6 +8,7 @@ export SETUP="$ZSH/setup"
 command_exists() {
   command -v "$@" >/dev/null 2>&1
 }
+
 # New config
 # Load color formatter
 . $HOME/.config/posix/print_format.sh
@@ -16,23 +17,37 @@ command_exists() {
 #   source $file
 # done
 
-source $ZSH/theme.zsh
+source $ZSH/starship.zsh
 source $ZSH/locale.zsh
-# source $ZSH/lib/history.zsh
-# source $ZSH/lib/completion.zsh
-# source $ZSH/lib/git.zsh
-# source $ZSH/lib/directories.zsh
+source $ZSH/lib/history.zsh
+source $ZSH/lib/completion.zsh
+source $ZSH/lib/git.zsh
+source $ZSH/lib/directories.zsh
+
+# Set neovim as editor
+command_exists nvim || {
+  echo "$(bold)$(red) Neovim is not installed!$(reset)"
+  exit 1
+}
+export EDITOR=nvim
+
+# Install/Activate Mise
+source $SETUP/mise.zsh
+if [ $? -eq 0 ]; then
+    eval "$(~/.local/bin/mise activate zsh)"
+else
+    echo "$(bold)$(red)Mise Install Script failed.$(reset)"
+    exit 1
+fi
 
 # Go-lang-specific configuration
-{{- if (lookPath "go") -}}
 export GOPATH="$HOME/go"
 export PATH="$PATH:$GOPATH/bin"
-{{- end -}}
 
 # FZF Integration
-{{- if (lookPath "fzf") -}}
+{{ if (lookPath "fzf") }}
 source <(fzf --zsh)
-{{- end -}}
+{{ end }}
 
 # Enable vi mode
 bindkey -v
@@ -44,15 +59,19 @@ bindkey -v
 ### MacOS CONFIG  ###
 #####################
 {{ if eq .chezmoi.os "darwin" }}
-  export BREW_PATH="/opt/homebrew/bin"
-  export PATH=$BREW_PATH:$PATH
-  {{ if (lookPath "/Applications/iTerm.app/Contents/MacOS/iTerm2") -}}
-    source $SETUP/iterm2.zsh
-  {{- end }}
-{{ else if eq .chezmoi.os "linux" }}
+# Homebrew Ruby
+export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
+# Main Homebrew path 
+export BREW_PATH="/opt/homebrew/bin"
+export PATH=$BREW_PATH:$PATH
+# Iterm2 shell integration
+{{ if (lookPath "/Applications/iTerm.app/Contents/MacOS/iTerm2") }}
+source $SETUP/iterm2.zsh
+{{ end }}
 #####################
 ### LINUX CONFIG  ###
 #####################
+{{ else if eq .chezmoi.os "linux" }}
 {{   if eq .chezmoi.osRelease.id "debian" }}
 {{   else if eq .chezmoi.osRelease.id "fedora" }}
 {{   else if eq .chezmoi.osRelease.id "arch" }}
@@ -66,13 +85,12 @@ fi
 ## MOBILE DEV MAC ###
 #####################
 {{ if eq .chezmoi.hostname "euge-mini" }}
-  #-- Android Studio --
-  source $SETUP/android_studio.zsh
+#-- Android Studio --
+source $SETUP/android_studio.zsh
 
-  #-- LM Studio --
-  {{ if (lookPath "/Applications/LM Studio.app/Contents/MacOS/LM Studio") -}}
-    export PATH="$PATH:$HOME/.lmstudio/bin"
-  {{- end }}
+#-- LM Studio --
+{{ if (lookPath "/Applications/LM Studio.app/Contents/MacOS/LM Studio") }}
+export PATH="$PATH:$HOME/.lmstudio/bin"
 {{ end }}
-# other comment
+{{ end }}
 
