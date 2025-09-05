@@ -1,0 +1,20 @@
+command_exists tmux || command_exists bash || command_exists git || {
+    fmt_error "Missing tmux or dependencies (bash, git)"
+    return 1
+}
+if [ -f $HOME/.config/tmux/plugins/tpm/tpm ]; then
+    return 0
+fi
+
+echo "$(bold)$(yellow)Installing Tmux Plugin Manager$(reset)"
+# Set up tmux Plugin manager
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+if [ $? -eq 0 ]; then
+    echo "$(bold)$(green)✅Finished Installing (git clone)$(reset)"
+    return 0
+else
+    echo "$(bold)$(red)Clone failed ❌$(reset)"
+    cat error.log
+    return 1
+fi
+

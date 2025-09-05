@@ -1,7 +1,7 @@
 #####################
 ### SHARED CONFIG ###
 #####################
-export POSIX_CONFIG="$HOME/.config/posix" # Works with sh/bash/zsh
+export POSIX="$HOME/.config/posix" # Works with sh/bash/zsh
 export ZSH="$HOME/.config/zsh"
 export SETUP="$ZSH/setup"
 
@@ -32,8 +32,8 @@ command_exists nvim || {
 export EDITOR=nvim
 
 # Source the shared aliases file
-if [ -f $HOME/.config/posix/aliases ]; then
-    source $HOME/.config/posix/aliases
+if [ -f $POSIX/aliases ]; then
+    source $POSIX/aliases
 fi
 
 # Install/Activate Mise
