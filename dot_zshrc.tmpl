@@ -114,4 +114,6 @@ export PATH="$PATH:$HOME/.lmstudio/bin"
 {{ end }}
 
 # Start the main tmux session 
-tmux new -s main
+# A -> attach session if allready exists
+# s -> session name
+tmux new -A -s main
