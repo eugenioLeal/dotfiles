@@ -59,6 +59,9 @@ if command -v zoxide &> /dev/null; then
   eval "$(zoxide init zsh)"
 fi
 
+# Tmux
+source $POSIX/tmux
+
 # Enable vi mode
 bindkey -v
 
@@ -110,3 +113,5 @@ export PATH="$PATH:$HOME/.lmstudio/bin"
 {{ end }}
 {{ end }}
 
+# Start the main tmux session 
+tmux new -s main
