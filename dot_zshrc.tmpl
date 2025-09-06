@@ -50,9 +50,9 @@ export GOPATH="$HOME/go"
 export PATH="$PATH:$GOPATH/bin"
 
 # FZF Integration
-{{ if (lookPath "fzf") }}
+if command_exists fzf; then
 source <(fzf --zsh)
-{{ end }}
+fi
 
 # Zoxide 
 if command -v zoxide &> /dev/null; then
