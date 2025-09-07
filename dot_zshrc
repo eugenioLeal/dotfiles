@@ -99,16 +99,12 @@ if [ -f /etc/os-release ]; then
 . /etc/os-release
 case "$ID" in
 debian|ubuntu)
-echo "OS=Linux Distro=Debian or Ubuntu - ($ID)"
 ;;
 fedora)
-echo "OS=Linux Distro=Fedora"
 ;;
 arch)
-echo "OS=Linux Distro=Arch"
 ;;
 *)
-echo "OS=Linux Distro=Other -> ($ID)"
 ;;
 esac
 
