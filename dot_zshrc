@@ -139,4 +139,8 @@ fi
 # Start the main tmux session 
 # A -> attach session if allready exists
 # s -> session name
+if [ -z $TMUX ]; then
+echo "Attaching to main session"
 tmux new -A -s main
+fi
+
