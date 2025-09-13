@@ -21,7 +21,7 @@ shopt -s histverify
 shopt -s lithist
 
 # Record each line as it gets issued
-_omb_util_add_prompt_command 'history -a'
+PROMPT_COMMAND='history -a; history -n;'
 
 export HISTSIZE=500000000
 export HISTFILESIZE=500000000
