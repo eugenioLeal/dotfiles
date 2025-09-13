@@ -1,3 +1,4 @@
 alias lazymoi='lazygit --path ~/.local/share/chezmoi'
 alias echopath='echo $PATH | tr ":" "\n"'
+alias j=z # Set zoxide command as jump
 
