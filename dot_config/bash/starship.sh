@@ -1,0 +1,6 @@
+if command -v starship &>/dev/null; then
+    eval "$(starship init bash)"
+else
+    curl -sS https://starship.rs/install.sh | sh
+    eval "$(starship init bash)"
+fi
