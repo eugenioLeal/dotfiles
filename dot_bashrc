@@ -2,7 +2,7 @@
 ### SHARED CONFIG ###
 #####################
 export POSIX="$HOME/.config/posix" # Works with sh/bash/zsh
-export BSH="$HOME/.config/zsh"
+export BSH="$HOME/.config/bash"
 export SETUP="$BSH/setup"
 
 command_exists() {
