@@ -1,3 +1,5 @@
+#!/bin/env bash
+
 #####################
 ### SHARED CONFIG ###
 #####################
@@ -11,17 +13,17 @@ command_exists() {
 
 # New config
 # Load color formatter
-. $HOME/.config/posix/print_format.sh
+. "$HOME/.config/posix/print_format.sh"
 
 # for file in "$BSH"/lib/*.zsh(N); do
 #   source $file
 # done
 
-source $POSIX/locale.sh
-source $BSH/starship.sh
-source $BSH/lib/history.sh
-source $BSH/lib/options.sh
-source $BSH/lib/directories.sh
+source "$POSIX/locale.sh"
+source "$BSH/starship.sh"
+source "$BSH/lib/history.sh"
+source "$BSH/lib/options.sh"
+source "$BSH/lib/directories.sh"
 
 # Set neovim as editor
 command_exists nvim || {
@@ -34,13 +36,14 @@ export EDITOR=nvim
 export PATH="$PATH:$HOME/bin"
 
 # Source the shared aliases file
-if [ -f $POSIX/aliases ]; then
-    source $POSIX/aliases
+if [ ! -f "$POSIX/aliases" ]; then
+    fmt_error "Aliases file not found"
+    exit 1
 fi
+source "$POSIX/aliases"
 
 # Install/Activate Mise
-source $POSIX/mise.sh
-if [ $? -eq 0 ]; then
+if source "$POSIX/mise.sh" -eq 0 ; then
     eval "$(~/.local/bin/mise activate bash)"
 else
     echo "$(bold)$(red)Mise Install Script failed.$(reset)"
@@ -52,17 +55,21 @@ export GOPATH="$HOME/go"
 export PATH="$PATH:$GOPATH/bin"
 
 # FZF Integration
-if command_exists fzf; then
-    eval "$(fzf --bash)"
+if ! command_exists fzf; then
+    fmt_error "Fzf is not installed"
+    exit 1
 fi
+eval "$(fzf --bash)"
 
 # Zoxide
-if command -v zoxide &>/dev/null; then
-    eval "$(zoxide init bash)"
+if ! command -v zoxide &>/dev/null; then
+    fmt_error "Zoxide is not installed"
+    exit 1
 fi
+eval "$(zoxide init bash)"
 
 # Tmux
-source $POSIX/tmux
+source "$POSIX/tmux"
 
 # Enable vi mode
 set -o vi
@@ -83,7 +90,7 @@ Darwin)
     # Ignore DS_Store files in git
     if [[ -x $HOME/.config/git/ignore ]]; then
         if command_exists git; then
-            git config --global core.excludesfile $HOME/.config/git/ignore
+            git config --global core.excludesfile "$HOME/.config/git/ignore"
         fi
     fi
     ;;
@@ -103,7 +110,7 @@ Linux)
     fi
     ;;
 *)
-    echo "OS=Unknown ($os)"
+    echo "OS=Unknown Operating System"
     exit 1
     ;;
 esac
@@ -114,7 +121,7 @@ esac
 if [[ $HOST == 'euge-mini' ]]; then
     #-- Android Studio --
     if command_exists "/Applications/Android Studio.app/Contents/MacOS/studio"; then
-        source $POSIX/android_studio.sh
+        source "$POSIX/android_studio.sh"
     fi
 
     #-- LM Studio --
@@ -126,7 +133,7 @@ fi
 # Start the main tmux session
 # A -> attach session if allready exists
 # s -> session name
-if [ -z $TMUX ]; then
+if [ -z "$TMUX" ]; then
     echo "Attaching to main session"
     tmux new -A -s main
 fi
