@@ -17,8 +17,8 @@ command_exists() {
 #   source $file
 # done
 
+source $POSIX/locale.sh
 source $ZSH/starship.zsh
-source $ZSH/locale.zsh
 source $ZSH/lib/history.zsh
 source $ZSH/lib/completion.zsh
 source $ZSH/lib/git.zsh
@@ -40,7 +40,7 @@ if [ -f $POSIX/aliases ]; then
 fi
 
 # Install/Activate Mise
-source $SETUP/mise.zsh
+source $POSIX/mise.sh
 if [ $? -eq 0 ]; then
     eval "$(~/.local/bin/mise activate zsh)"
 else
@@ -126,7 +126,7 @@ if [[ $HOST == 'euge-mini' ]]; then
 {
 #-- Android Studio --
 if command_exists "/Applications/Android Studio.app/Contents/MacOS/studio"; then
-source $SETUP/android_studio.zsh
+source $POSIX/android_studio.sh
 fi
 
 #-- LM Studio --
