@@ -27,28 +27,27 @@ source "$ZSH/lib/git.zsh"
 source "$ZSH/lib/directories.zsh"
 
 # Set neovim as editor
-command_exists nvim || {
-  echo "$(bold)$(red) Neovim is not installed!$(reset)"
-  exit 1
-}
-export EDITOR=nvim
+if command_exists nvim ; then
+    export EDITOR=nvim
+else
+    echo "$(bold)$(red) Neovim is not installed!$(reset)"
+fi
 
 # Add shell scripts to PATH
 export PATH="$PATH:$HOME/bin"
 
 # Source the shared aliases file
-if [ ! -f "$POSIX/aliases" ]; then
+if [ -f "$POSIX/aliases" ]; then
+    source "$POSIX/aliases"
+else
     fmt_error "Aliases file Not found"
-    exit 1
 fi
-source "$POSIX/aliases"
 
 # Install/Activate Mise
 if source "$POSIX/mise.sh" -eq 0 ; then
     eval "$(~/.local/bin/mise activate zsh)"
 else
     echo "$(bold)$(red)Mise Install Script failed.$(reset)"
-    exit 1
 fi
 
 # Go-lang-specific configuration
@@ -56,18 +55,18 @@ export GOPATH="$HOME/go"
 export PATH="$PATH:$GOPATH/bin"
 
 # FZF Integration
-if ! command_exists fzf; then
+if command_exists fzf; then
+    source <(fzf --zsh)
+else
     fmt_error "Fzf Not Installed"
-    exit 1
 fi
-source <(fzf --zsh)
 
 # Zoxide 
-if ! command -v zoxide &> /dev/null; then
+if command -v zoxide &> /dev/null; then
+    eval "$(zoxide init zsh)"
+else
     fmt_error "Zoxide not installed"
-    exit 1
 fi
-eval "$(zoxide init zsh)"
 
 # Tmux
 source "$POSIX/tmux"
@@ -90,7 +89,7 @@ export BREW_PATH="/opt/homebrew/bin"
 export PATH=$BREW_PATH:$PATH
 # Iterm2 shell integration
 if command_exists "/Applications/iTerm.app/Contents/MacOS/iTerm2"; then
-source "$SETUP/iterm2.zsh"
+    source "$SETUP/iterm2.zsh"
 fi
 # Ignore DS_Store files in git
 if [[ -x $HOME/.config/git/ignore ]]; then
@@ -121,8 +120,7 @@ esac
 } fi
 ;;
 *)
-echo "OS=Unknown operating system"
-exit 1
+fmt_error "OS=Unknown operating system"
 ;;
 esac
 

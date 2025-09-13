@@ -26,28 +26,27 @@ source "$BSH/lib/options.sh"
 source "$BSH/lib/directories.sh"
 
 # Set neovim as editor
-command_exists nvim || {
+if command_exists nvim; then
+    export EDITOR=nvim
+else
     echo "$(bold)$(red) Neovim is not installed!$(reset)"
-    exit 1
-}
-export EDITOR=nvim
+fi
 
 # Add shell scripts to PATH
 export PATH="$PATH:$HOME/bin"
 
 # Source the shared aliases file
-if [ ! -f "$POSIX/aliases" ]; then
+if [ -f "$POSIX/aliases" ]; then
+    source "$POSIX/aliases"
+else
     fmt_error "Aliases file not found"
-    exit 1
 fi
-source "$POSIX/aliases"
 
 # Install/Activate Mise
 if source "$POSIX/mise.sh" -eq 0 ; then
     eval "$(~/.local/bin/mise activate bash)"
 else
     echo "$(bold)$(red)Mise Install Script failed.$(reset)"
-    exit 1
 fi
 
 # Go-lang-specific configuration
@@ -55,18 +54,18 @@ export GOPATH="$HOME/go"
 export PATH="$PATH:$GOPATH/bin"
 
 # FZF Integration
-if ! command_exists fzf; then
+if command_exists fzf; then
+    eval "$(fzf --bash)"
+else
     fmt_error "Fzf is not installed"
-    exit 1
 fi
-eval "$(fzf --bash)"
 
 # Zoxide
-if ! command -v zoxide &>/dev/null; then
+if command -v zoxide &>/dev/null; then
+    eval "$(zoxide init bash)"
+else
     fmt_error "Zoxide is not installed"
-    exit 1
 fi
-eval "$(zoxide init bash)"
 
 # Tmux
 source "$POSIX/tmux"
@@ -110,8 +109,7 @@ Linux)
     fi
     ;;
 *)
-    echo "OS=Unknown Operating System"
-    exit 1
+    fmt_error "OS=Unknown Operating System"
     ;;
 esac
 
