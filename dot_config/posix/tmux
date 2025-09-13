@@ -1,7 +1,8 @@
-command_exists tmux || command_exists bash || command_exists git || {
+if ! command_exists tmux || ! command_exists bash || ! command_exists git; then  {
     fmt_error "Missing tmux or dependencies (bash, git)"
     return 1
-}
+fi
+
 if [ -f $HOME/.config/tmux/plugins/tpm/tpm ]; then
     return 0
 fi
