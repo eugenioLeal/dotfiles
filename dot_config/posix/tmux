@@ -1,4 +1,4 @@
-if ! command_exists tmux || ! command_exists bash || ! command_exists git; then  {
+if ! command_exists tmux || ! command_exists bash || ! command_exists git; then
     fmt_error "Missing tmux or dependencies (bash, git)"
     return 1
 fi
