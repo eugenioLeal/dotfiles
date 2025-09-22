@@ -1,0 +1,6 @@
+if command -v zoxide &>/dev/null; then
+    eval "$(zoxide init zsh)"
+else
+    fmt_error "Zoxide not installed"
+fi
+

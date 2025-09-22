@@ -1,32 +1,29 @@
 #!/bin/env bash
 
-source "$HOME/.shellconfig"
-
-exit 0
-#####################
-### SHARED CONFIG ###
-#####################
 export POSIX="$HOME/.config/posix" # Works with sh/bash/zsh
-export BSH="$HOME/.config/bash"
-export SETUP="$BSH/setup"
+export CURRENT_SHELL_NAME="$SHELL:t"
+export CURRENT_SHELL_CONFIG_DIRECTORY="$HOME/.config/$CURRENT_SHELL_NAME"
+export SETUP="$CURRENT_SHELL_CONFIG_DIRECTORY/setup"
 
 command_exists() {
     command -v "$@" >/dev/null 2>&1
 }
 
-# New config
-# Load color formatter
-. "$HOME/.config/posix/print_format.sh"
+# shellcheck source="dot_config/posix/print_format.sh"
+. "$POSIX/print_format.sh"
 
-# for file in "$BSH"/lib/*.zsh(N); do
-#   source $file
-# done
+for file in "$CURRENT_SHELL_CONFIG_DIRECTORY"/plugins/*."CURRENT_SHELL_NAME"; do
+    if [ -f "$file" ]; then
+        source "$file"
+    fi
+done
 
 source "$POSIX/locale.sh"
-source "$BSH/starship.sh"
-source "$BSH/lib/history.sh"
-source "$BSH/lib/options.sh"
-source "$BSH/lib/directories.sh"
+
+if source "$POSIX/terminal_has_nerd_font.sh" -eq 0; then
+    export YOU_ARE_USING_A_NERD_FONT="true"
+    source "$CURRENT_SHELL_CONFIG_DIRECTORY/starship.zsh"
+fi
 
 # Set neovim as editor
 if command_exists nvim; then
@@ -39,42 +36,26 @@ fi
 export PATH="$PATH:$HOME/bin"
 
 # Source the shared aliases file
-if [ -f "$POSIX/aliases" ]; then
-    source "$POSIX/aliases"
-else
-    fmt_error "Aliases file not found"
-fi
+source "$POSIX/aliases"
 
 # Install/Activate Mise
-if source "$POSIX/mise.sh" -eq 0; then
-    eval "$(~/.local/bin/mise activate bash)"
-else
-    echo "$(bold)$(red)Mise Install Script failed.$(reset)"
-fi
+source "$SETUP/mise"
 
 # Go-lang-specific configuration
 export GOPATH="$HOME/go"
 export PATH="$PATH:$GOPATH/bin"
 
 # FZF Integration
-if command_exists fzf; then
-    eval "$(fzf --bash)"
-else
-    fmt_error "Fzf is not installed"
-fi
+source "$SETUP/fzf"
 
 # Zoxide
-if command -v zoxide &>/dev/null; then
-    eval "$(zoxide init bash)"
-else
-    fmt_error "Zoxide is not installed"
-fi
+source "$SETUP/zoxide"
 
 # Tmux
 source "$POSIX/tmux"
 
 # Enable vi mode
-set -o vi
+bindkey -v
 
 # Custom LS_COLORS settings
 #export LS_COLORS="di=1;34:fi=0;37:ln=36:pi=33:so=32:bd=46;34:cd=46;34:or=31;43:mi=05;37;41"
@@ -89,6 +70,10 @@ Darwin)
     # Main Homebrew path
     export BREW_PATH="/opt/homebrew/bin"
     export PATH=$BREW_PATH:$PATH
+    # Iterm2 shell integration
+    if command_exists "/Applications/iTerm.app/Contents/MacOS/iTerm2"; then
+        source "$SETUP/iterm2.zsh"
+    fi
     # Ignore DS_Store files in git
     if [[ -x $HOME/.config/git/ignore ]]; then
         if command_exists git; then
@@ -100,26 +85,28 @@ Linux)
     #####################
     ### LINUX CONFIG  ###
     #####################
-    echo "Shared linux config"
     if [ -f /etc/os-release ]; then
-        . /etc/os-release
-        case "$ID" in
-        debian | ubuntu) ;;
-        fedora) ;;
-        arch) ;;
-        *) ;;
-        esac
+        {
+            . /etc/os-release
+            case "$ID" in
+            debian | ubuntu) ;;
+            fedora) ;;
+            arch) ;;
+            *) ;;
+            esac
+
+        }
     fi
     ;;
 *)
-    fmt_error "OS=Unknown Operating System"
+    fmt_error "OS=Unknown operating system"
     ;;
 esac
 
-#####################
-## MOBILE DEV MAC ###
-#####################
 if [[ $HOST == 'euge-mini' ]]; then
+    #####################
+    ## MOBILE DEV MAC ###
+    #####################
     #-- Android Studio --
     if command_exists "/Applications/Android Studio.app/Contents/MacOS/studio"; then
         source "$POSIX/android_studio.sh"

@@ -1,0 +1,24 @@
+#!/bin/env bash
+
+if ! command_exists gpg || command_exists curl; then
+    fmt_error "Missing dependencies: (GnuPG, curl) to install Mise"
+    return 1
+fi
+
+if [[ ! -x "$HOME/.local/bin/mise" ]]; then
+    echo "$(bold)$(yellow)mise not found. Installing now...$(reset)"
+    gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys 0x7413A06D
+    curl https://mise.jdx.dev/install.sh.sig | gpg --decrypt >install.sh
+    if sh ./install.sh; then
+        echo "$(bold)$(green)✅ mise installed successfully.$(reset)"
+        rm install.sh
+    else
+        echo "❌ $(bold)$(red)Mise Installation failed with error code $?"
+        rm install.sh
+        return 1
+    fi
+fi
+
+echo "$(bold)$(yellow)Activating mise...$(reset)"
+eval "$(~/.local/bin/mise activate zsh)"
+return 0

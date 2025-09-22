@@ -1,0 +1,8 @@
+#!/bin/env bash
+
+if command_exists fzf; then
+    source <(fzf --zsh)
+else
+    fmt_error "Fzf Not Installed"
+fi
+

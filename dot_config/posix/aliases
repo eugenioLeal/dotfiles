@@ -1,4 +1,9 @@
+#!/bin/env bash
+
 alias lazymoi='lazygit --path ~/.local/share/chezmoi'
 alias echopath='echo $PATH | tr ":" "\n"'
 alias j=z # Set zoxide command as jump
 
+if [ -n "$YOU_ARE_USING_A_NERD_FONT" ]; then
+    alias ls='eza --icons'
+fi

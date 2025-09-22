@@ -4,15 +4,6 @@ autoload -U colors && colors
 # Expand variables and commands in PROMPT variables
 setopt prompt_subst
 
-# Prompt function theming defaults
-ZSH_THEME_GIT_PROMPT_PREFIX="git:("   # Beginning of the git prompt, before the branch name
-ZSH_THEME_GIT_PROMPT_SUFFIX=")"       # End of the git prompt
-ZSH_THEME_GIT_PROMPT_DIRTY="*"        # Text to display if the branch is dirty
-ZSH_THEME_GIT_PROMPT_CLEAN=""         # Text to display if the branch is clean
-ZSH_THEME_RUBY_PROMPT_PREFIX="("
-ZSH_THEME_RUBY_PROMPT_SUFFIX=")"
-
-
 # Use diff --color if available
 if command diff --color /dev/null{,} &>/dev/null; then
   function diff {
