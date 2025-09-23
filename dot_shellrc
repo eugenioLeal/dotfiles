@@ -22,7 +22,7 @@ source "$POSIX/locale.sh"
 
 if source "$POSIX/terminal_has_nerd_font.sh" -eq 0; then
     export YOU_ARE_USING_A_NERD_FONT="true"
-    source "$CURRENT_SHELL_CONFIG_DIRECTORY/starship.zsh"
+    source "$SETUP/starship"
 fi
 
 # Set neovim as editor
