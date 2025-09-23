@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/bin/env zsh
 
 # The -s flag checks if the file exists and is not empty.
 if [ -s "$HOME/.iterm2_shell_integration.zsh" ]; then

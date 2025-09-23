@@ -4,6 +4,9 @@
 # Use `>|` to force redirection to an existing file
 set -o noclobber
 
+# all pipes must succeed to continue (default is just rightmost pipe)
+set -o pipefail
+
 # Update window size after every command
 shopt -s checkwinsize
 

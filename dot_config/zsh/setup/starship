@@ -1,9 +1,13 @@
 #!/bin/env bash
 
-if command -v starship &> /dev/null; then
-  eval "$(starship init zsh)"
-else
-  curl -sS https://starship.rs/install.sh | sh
-  eval "$(starship init zsh)"
+if ! command_exists starship; then
+    fmt_error "Starship is not Installed"
+    echo "Installing Starship Prompt"
+    if ! curl -sS https://starship.rs/install.sh | sh; then
+        fmt_error "Starship did not instal correctly"
+        return 1
+    fi
 fi
 
+eval "$(starship init zsh)"
+return 0
