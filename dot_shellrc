@@ -20,7 +20,7 @@ done
 
 source "$POSIX/locale.sh"
 
-if source "$POSIX/terminal_has_nerd_font.sh" -eq 0; then
+if source "$POSIX/terminal_has_nerd_font.sh"; then
     export YOU_ARE_USING_A_NERD_FONT="true"
     source "$SETUP/starship"
 fi

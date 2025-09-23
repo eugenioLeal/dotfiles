@@ -5,9 +5,9 @@ if ! command_exists starship; then
     echo "Installing Starship Prompt"
     if ! curl -sS https://starship.rs/install.sh | sh; then
         fmt_error "Starship did not instal correctly"
-        return 1
+        return 0
     fi
 fi
 
 eval "$(starship init zsh)"
-return 0
+return 1
