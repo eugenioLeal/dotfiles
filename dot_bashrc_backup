@@ -1,0 +1,137 @@
+#!/bin/env bash
+
+#####################
+### SHARED CONFIG ###
+#####################
+export POSIX="$HOME/.config/posix" # Works with sh/bash/zsh
+export BSH="$HOME/.config/bash"
+export SETUP="$BSH/setup"
+
+command_exists() {
+    command -v "$@" >/dev/null 2>&1
+}
+
+# New config
+# Load color formatter
+. "$HOME/.config/posix/print_format.sh"
+
+# for file in "$BSH"/lib/*.zsh(N); do
+#   source $file
+# done
+
+source "$POSIX/locale.sh"
+source "$BSH/starship.sh"
+source "$BSH/lib/history.sh"
+source "$BSH/lib/options.sh"
+source "$BSH/lib/directories.sh"
+
+# Set neovim as editor
+if command_exists nvim; then
+    export EDITOR=nvim
+else
+    echo "$(bold)$(red) Neovim is not installed!$(reset)"
+fi
+
+# Add shell scripts to PATH
+export PATH="$PATH:$HOME/bin"
+
+# Source the shared aliases file
+if [ -f "$POSIX/aliases" ]; then
+    source "$POSIX/aliases"
+else
+    fmt_error "Aliases file not found"
+fi
+
+# Install/Activate Mise
+if source "$POSIX/mise.sh" -eq 0; then
+    eval "$(~/.local/bin/mise activate bash)"
+else
+    echo "$(bold)$(red)Mise Install Script failed.$(reset)"
+fi
+
+# Go-lang-specific configuration
+export GOPATH="$HOME/go"
+export PATH="$PATH:$GOPATH/bin"
+
+# FZF Integration
+if command_exists fzf; then
+    eval "$(fzf --bash)"
+else
+    fmt_error "Fzf is not installed"
+fi
+
+# Zoxide
+if command -v zoxide &>/dev/null; then
+    eval "$(zoxide init bash)"
+else
+    fmt_error "Zoxide is not installed"
+fi
+
+# Tmux
+source "$POSIX/tmux"
+
+# Enable vi mode
+set -o vi
+
+# Custom LS_COLORS settings
+#export LS_COLORS="di=1;34:fi=0;37:ln=36:pi=33:so=32:bd=46;34:cd=46;34:or=31;43:mi=05;37;41"
+
+case "$(uname -s)" in
+Darwin)
+    #####################
+    ### MacOS CONFIG  ###
+    #####################
+    # Homebrew Ruby
+    export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
+    # Main Homebrew path
+    export BREW_PATH="/opt/homebrew/bin"
+    export PATH=$BREW_PATH:$PATH
+    # Ignore DS_Store files in git
+    if [[ -x $HOME/.config/git/ignore ]]; then
+        if command_exists git; then
+            git config --global core.excludesfile "$HOME/.config/git/ignore"
+        fi
+    fi
+    ;;
+Linux)
+    #####################
+    ### LINUX CONFIG  ###
+    #####################
+    echo "Shared linux config"
+    if [ -f /etc/os-release ]; then
+        . /etc/os-release
+        case "$ID" in
+        debian | ubuntu) ;;
+        fedora) ;;
+        arch) ;;
+        *) ;;
+        esac
+    fi
+    ;;
+*)
+    fmt_error "OS=Unknown Operating System"
+    ;;
+esac
+
+#####################
+## MOBILE DEV MAC ###
+#####################
+if [[ $HOST == 'euge-mini' ]]; then
+    #-- Android Studio --
+    if command_exists "/Applications/Android Studio.app/Contents/MacOS/studio"; then
+        source "$POSIX/android_studio.sh"
+    fi
+
+    #-- LM Studio --
+    if command_exists "/Applications/LM Studio.app/Contents/MacOS/LM Studio"; then
+        export PATH="$PATH:$HOME/.lmstudio/bin"
+    fi
+fi
+
+# Start the main tmux session
+# A -> attach session if allready exists
+# s -> session name
+if [ -z "$TMUX" ]; then
+    echo "Attaching to main session"
+    tmux new -A -s main
+fi
