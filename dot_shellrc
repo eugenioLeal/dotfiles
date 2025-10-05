@@ -54,6 +54,10 @@ source "$SETUP/zoxide"
 # Tmux
 source "$POSIX/tmux"
 
+# Emacs
+export PATH="$HOME/.emacs.d/bin:$PATH"
+export DOOMDIR="$HOME/.config/doom"
+
 # Enable vi mode
 bindkey -v
 
@@ -80,6 +84,11 @@ Darwin)
             git config --global core.excludesfile "$HOME/.config/git/ignore"
         fi
     fi
+    # Homebrew gnu core utils
+    alias gfind="/opt/homebrew/opt/findutils/libexec/gnubin/find"
+    alias gtar="/opt/homebrew/opt/gnu-tar/libexec/gnubin/tar"
+    alias gsed="/opt/homebrew/opt/gnu-sed/libexec/gnubin/sed"
+    alias gls="/opt/homebrew/opt/coreutils/libexec/gnubin/ls"
     ;;
 Linux)
     #####################
