@@ -12,7 +12,7 @@ command_exists() {
 # shellcheck source="dot_config/posix/print_format.sh"
 . "$POSIX/print_format.sh"
 
-for file in "$CURRENT_SHELL_CONFIG_DIRECTORY"/plugins/*."CURRENT_SHELL_NAME"; do
+for file in "$CURRENT_SHELL_CONFIG_DIRECTORY"/plugins/*; do
     if [ -f "$file" ]; then
         source "$file"
     fi
