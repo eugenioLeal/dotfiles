@@ -53,3 +53,10 @@ bind '"\e[D": backward-char'
 #  "dd.mm.yyyy") HISTTIMEFORMAT='%d.%m.%Y %T ' ;;
 #  "yyyy-mm-dd"|*) HISTTIMEFORMAT='%F %T ' ;;
 #esac
+
+# Fuzzy find history
+fzf-history() {
+    local cmd
+    cmd=$(history | fzf --tac | sed 's/ *[0-9]* *//') || return
+    eval "$cmd"
+}

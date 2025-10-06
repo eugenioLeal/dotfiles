@@ -46,3 +46,9 @@ setopt hist_ignore_dups       # ignore duplicated commands history list
 setopt hist_ignore_space      # ignore commands that start with space
 setopt hist_verify            # show command with history expansion to user before running it
 setopt share_history          # share command history data
+
+fzf-history() {
+  local cmd
+  cmd=$(fc -l 1 | fzf --tac | sed 's/^[[:space:]]*[0-9]\+[[:space:]]*//') || return
+  eval "$cmd"
+}
