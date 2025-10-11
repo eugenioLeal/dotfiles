@@ -1,6 +1,6 @@
 #!/bin/env bash
 
-if ! command_exists gpg || command_exists curl; then
+if ! command_exists gpg || ! command_exists curl; then
     fmt_error "Missing dependencies: (GnuPG, curl) to install Mise"
     return 1
 fi
@@ -19,6 +19,5 @@ if [[ ! -x "$HOME/.local/bin/mise" ]]; then
     fi
 fi
 
-echo "$(bold)$(yellow)Activating mise...$(reset)"
 eval "$(~/.local/bin/mise activate zsh)"
 return 0
