@@ -55,8 +55,25 @@ source "$SETUP/zoxide"
 source "$POSIX/tmux"
 
 # Emacs
-export PATH="$HOME/.emacs.d/bin:$PATH"
+export PATH="$HOME/.config/emacs/bin:$PATH"
 export DOOMDIR="$HOME/.config/doom"
+export EMACSDIR="$HOME/.config/emacs"
+
+# Antigravity
+export PATH="/Users/euge/.antigravity/antigravity/bin:$PATH"
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/euge/.lmstudio/bin"
+# End of LM Studio CLI section
+
+# Added by Antigravity IDE
+export PATH="/Users/euge/.antigravity-ide/antigravity-ide/bin:$PATH"
+
+# Maestro cli (end-to-end testing)
+export PATH=$PATH:$HOME/.maestro/bin
+
+# Claude Code (don't want to pay extra for context)
+export CLAUDE_CODE_DISABLE_1M_CONTEXT=1
 
 # Enable vi mode
 bindkey -v
@@ -74,6 +91,8 @@ Darwin)
     # Main Homebrew path
     export BREW_PATH="/opt/homebrew/bin"
     export PATH=$BREW_PATH:$PATH
+    # Java Open JDK
+    export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
     # Iterm2 shell integration
     if command_exists "/Applications/iTerm.app/Contents/MacOS/iTerm2"; then
         source "$SETUP/iterm2.zsh"
@@ -89,6 +108,21 @@ Darwin)
     alias gtar="/opt/homebrew/opt/gnu-tar/libexec/gnubin/tar"
     alias gsed="/opt/homebrew/opt/gnu-sed/libexec/gnubin/sed"
     alias gls="/opt/homebrew/opt/coreutils/libexec/gnubin/ls"
+
+    # Homebrew Emacs
+    export EMACS_BIN="/opt/homebrew/bin/emacs"
+
+    # Herd injected PHP 8.4 configuration.
+    export HERD_PHP_84_INI_SCAN_DIR="/Users/euge/Library/Application Support/Herd/config/php/84/"
+
+    # Herd injected NVM configuration
+    export NVM_DIR="/Users/euge/Library/Application Support/Herd/config/nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+
+    [[ -f "/Applications/Herd.app/Contents/Resources/config/shell/zshrc.zsh" ]] && builtin source "/Applications/Herd.app/Contents/Resources/config/shell/zshrc.zsh"
+
+    # Herd injected PHP binary.
+    export PATH="/Users/euge/Library/Application Support/Herd/bin/":$PATH
     ;;
 Linux)
     #####################
